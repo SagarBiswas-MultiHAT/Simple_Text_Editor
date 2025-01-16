@@ -28,7 +28,6 @@ To run the script, follow these steps:
 3. Navigate to the directory containing the script.
 4. Run the following command:
 
-   ```bash
    python3 simple_text_editor.py
    ```
 
