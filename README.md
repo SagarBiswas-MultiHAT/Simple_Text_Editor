@@ -1,70 +1,49 @@
-### README:
 
-```markdown
 # Simple Text Editor
 
-This is a basic text editor built using Python and Tkinter. It provides a GUI for opening, editing, and saving text files. The editor supports a menu bar with options to open and save files, an "About" section, and a confirmation dialog before exiting the application.
+A lightweight text editor built with Python's Tkinter library. This editor provides basic functionalities such as creating new files, opening existing files, saving files, and displaying file information. It is simple, intuitive, and ideal for small text editing tasks.
 
-## Features:
-- Open and save text files with a user-friendly file dialog.
-- Basic text editing with word wrapping.
-- "About" section with creator information.
-- Exit confirmation to prevent accidental closures.
+## Features
 
-## Requirements:
-- **Python 3.x**
-- **Tkinter** (included with Python)
+- **New File**: Start a new document.
+- **Open File**: Open and edit existing text files.
+- **Save File**: Save your current work.
+- **Save As**: Save the file with a new name or location.
+- **About**: Display information about the editor.
+- **Exit**: Close the application.
+- **Keyboard Shortcuts**: Supports `Ctrl+S` for quick save.
+- **Status Bar**: Displays the current file name or status.
 
-Ensure you have Python installed. You can download it from [python.org](https://www.python.org/).
+## Requirements
+
+- Python 3.x
+- Tkinter (comes pre-installed with Python)
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/SagarBiswas-MultiHAT/simple-text-editor.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd simple-text-editor
+   ```
 
 ## Usage
 
-### Running the Script
-
-To run the script, follow these steps:
-
-1. Clone the repository or download the script.
-2. Open a terminal or command prompt.
-3. Navigate to the directory containing the script.
-4. Run the following command:
-
-   python3 simple_text_editor.py
+1. Run the script:
+   ```bash
+   python script.py
    ```
+2. Use the menu options to create, open, or save files.
+3. The status bar displays the current file status.
 
-### Menu Options:
-- **File → Open**: Opens a text file to edit.
-- **File → Save**: Saves the current text to a file.
-- **File → Exit**: Exits the editor with confirmation.
-- **Help → About**: Shows information about the editor.
+## Example
 
-### Example Output
-When you run the script, you will see the text editor interface with the following options:
-- Open a file from your system.
-- Edit the text.
-- Save the edited text to a new file or overwrite the existing one.
-
-## Code Explanation
-
-### Main Script
-
-- **Tkinter Window**: Creates a simple GUI window with a menu bar for opening, saving, and exiting the text editor.
-- **Text Editor**: A text area where users can input and edit text. It wraps words automatically to avoid horizontal scrolling.
-- **Menu Bar**: Includes "File" and "Help" menus, with options to open files, save files, show an "About" section, and exit the program.
-
-### Error Handling
-- If a user tries to exit without confirming, a message box asks for confirmation before closing the editor.
-
-## Contributing
-
-Contributions are welcome! If you have suggestions for new features or improvements, feel free to open an issue or submit a pull request.
-
-## License
-
-This project is licensed under the MIT License. This license permits anyone to use, modify, and distribute the software with minimal restrictions, ensuring flexibility for open-source development. See the [LICENSE](LICENSE) file for details.
-
----
-
-**Note**: This script is designed for educational purposes and personal use.
+- Create a new file by selecting `File > New`.
+- Open an existing file by selecting `File > Open`.
+- Save your work using `File > Save` or `Ctrl+S`.
 
 
----
+#### Contributions are welcome! Feel free to open issues or submit pull requests.
