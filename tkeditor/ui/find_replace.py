@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import tkinter as tk
+from collections.abc import Callable
 from tkinter import messagebox
 
 from .window_utils import center_window
@@ -12,10 +13,10 @@ class FindReplaceDialog:
     def __init__(
         self,
         parent: tk.Tk,
-        on_find,
-        on_replace,
-        on_replace_all,
-        on_close=None,
+        on_find: Callable[[str, bool], None],
+        on_replace: Callable[[str, str, bool], None],
+        on_replace_all: Callable[[str, str, bool], None],
+        on_close: Callable[[], None] | None = None,
     ) -> None:
         self._parent = parent
         self._on_find = on_find

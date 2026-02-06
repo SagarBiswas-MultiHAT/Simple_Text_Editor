@@ -7,6 +7,7 @@ import re
 import sys
 import threading
 import tkinter as tk
+from functools import partial
 from pathlib import Path
 from tkinter import filedialog, font, messagebox, simpledialog
 
@@ -57,10 +58,20 @@ class TextEditorApp:
 
         self.menu_bar = tk.Menu(self.root)
         self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
-        self.file_menu.add_command(label="New", command=self.new_file, accelerator=f"{self._accel}+N")
-        self.file_menu.add_command(label="Open", command=self.open_file, accelerator=f"{self._accel}+O")
-        self.file_menu.add_command(label="Save", command=self.save_file, accelerator=f"{self._accel}+S")
-        self.file_menu.add_command(label="Save As", command=self.save_file_as, accelerator=f"{self._accel}+Shift+S")
+        self.file_menu.add_command(
+            label="New", command=self.new_file, accelerator=f"{self._accel}+N"
+        )
+        self.file_menu.add_command(
+            label="Open", command=self.open_file, accelerator=f"{self._accel}+O"
+        )
+        self.file_menu.add_command(
+            label="Save", command=self.save_file, accelerator=f"{self._accel}+S"
+        )
+        self.file_menu.add_command(
+            label="Save As",
+            command=self.save_file_as,
+            accelerator=f"{self._accel}+Shift+S",
+        )
         self.file_menu.add_separator()
         self.recent_menu = tk.Menu(self.file_menu, tearoff=0)
         self.file_menu.add_cascade(label="Open Recent", menu=self.recent_menu)
@@ -69,25 +80,47 @@ class TextEditorApp:
         self.menu_bar.add_cascade(label="File", menu=self.file_menu)
 
         self.edit_menu = tk.Menu(self.menu_bar, tearoff=0)
-        self.edit_menu.add_command(label="Undo", command=self.undo, accelerator=f"{self._accel}+Z")
-        self.edit_menu.add_command(label="Redo", command=self.redo, accelerator=f"{self._accel}+Y")
+        self.edit_menu.add_command(
+            label="Undo", command=self.undo, accelerator=f"{self._accel}+Z"
+        )
+        self.edit_menu.add_command(
+            label="Redo", command=self.redo, accelerator=f"{self._accel}+Y"
+        )
         self.edit_menu.add_separator()
-        self.edit_menu.add_command(label="Cut", command=self.cut, accelerator=f"{self._accel}+X")
-        self.edit_menu.add_command(label="Copy", command=self.copy, accelerator=f"{self._accel}+C")
-        self.edit_menu.add_command(label="Paste", command=self.paste, accelerator=f"{self._accel}+V")
+        self.edit_menu.add_command(
+            label="Cut", command=self.cut, accelerator=f"{self._accel}+X"
+        )
+        self.edit_menu.add_command(
+            label="Copy", command=self.copy, accelerator=f"{self._accel}+C"
+        )
+        self.edit_menu.add_command(
+            label="Paste", command=self.paste, accelerator=f"{self._accel}+V"
+        )
         self.edit_menu.add_separator()
-        self.edit_menu.add_command(label="Select All", command=self.select_all, accelerator=f"{self._accel}+A")
+        self.edit_menu.add_command(
+            label="Select All", command=self.select_all, accelerator=f"{self._accel}+A"
+        )
         self.menu_bar.add_cascade(label="Edit", menu=self.edit_menu)
 
         self.search_menu = tk.Menu(self.menu_bar, tearoff=0)
-        self.search_menu.add_command(label="Find", command=self.open_find_replace, accelerator=f"{self._accel}+F")
-        self.search_menu.add_command(label="Replace", command=self.open_find_replace, accelerator=f"{self._accel}+H")
+        self.search_menu.add_command(
+            label="Find", command=self.open_find_replace, accelerator=f"{self._accel}+F"
+        )
+        self.search_menu.add_command(
+            label="Replace",
+            command=self.open_find_replace,
+            accelerator=f"{self._accel}+H",
+        )
         self.menu_bar.add_cascade(label="Search", menu=self.search_menu)
 
         self.view_menu = tk.Menu(self.menu_bar, tearoff=0)
         self.theme_menu = tk.Menu(self.view_menu, tearoff=0)
-        self.theme_menu.add_command(label="Light", command=lambda: self.set_theme("light"))
-        self.theme_menu.add_command(label="Dark", command=lambda: self.set_theme("dark"))
+        self.theme_menu.add_command(
+            label="Light", command=lambda: self.set_theme("light")
+        )
+        self.theme_menu.add_command(
+            label="Dark", command=lambda: self.set_theme("dark")
+        )
         self.view_menu.add_cascade(label="Theme", menu=self.theme_menu)
         self.view_menu.add_command(label="Font Family", command=self.set_font_family)
         self.view_menu.add_command(label="Font Size", command=self.set_font_size)
@@ -112,7 +145,9 @@ class TextEditorApp:
 
         self.root.config(menu=self.menu_bar)
 
-        self.text = tk.Text(self.root, wrap="word", undo=True, autoseparators=True, maxundo=-1)
+        self.text = tk.Text(
+            self.root, wrap="word", undo=True, autoseparators=True, maxundo=-1
+        )
         self.text.pack(expand=True, fill="both")
         self.text.bind("<<Modified>>", self._on_modified)
         self.text.bind("<KeyRelease>", self._update_cursor_position)
@@ -163,7 +198,7 @@ class TextEditorApp:
         self.status_label.config(font=editor_font)
         self.pos_label.config(font=editor_font)
 
-    def _on_modified(self, _event=None) -> None:
+    def _on_modified(self, _event: tk.Event | None = None) -> None:
         if self.text.edit_modified():
             self._set_dirty(True)
             self.text.edit_modified(False)
@@ -181,7 +216,7 @@ class TextEditorApp:
     def _set_status(self, message: str) -> None:
         self.status_label.config(text=message)
 
-    def _update_cursor_position(self, _event=None) -> None:
+    def _update_cursor_position(self, _event: tk.Event | None = None) -> None:
         index = self.text.index(tk.INSERT)
         line, col = index.split(".")
         self.pos_label.config(text=f"Ln {line}, Col {int(col) + 1}")
@@ -234,9 +269,9 @@ class TextEditorApp:
     def _load_file_thread(self, path: Path) -> None:
         try:
             text, encoding = read_text_file(path)
-            self.root.after(0, lambda: self._apply_loaded_file(path, text, encoding))
+            self.root.after(0, self._apply_loaded_file, path, text, encoding)
         except (TextIOError, OSError) as exc:
-            self.root.after(0, lambda exc=exc: self._show_error("Open Error", str(exc)))
+            self.root.after(0, self._show_open_error, exc)
 
     def _apply_loaded_file(self, path: Path, text: str, encoding: str) -> None:
         self.text.delete("1.0", tk.END)
@@ -304,9 +339,9 @@ class TextEditorApp:
     def _write_file_thread(self, path: Path, text: str, encoding: str) -> None:
         try:
             write_text_file(path, text, encoding)
-            self.root.after(0, lambda: self._finish_save(path, encoding))
+            self.root.after(0, self._finish_save, path, encoding)
         except (OSError, TextIOError) as exc:
-            self.root.after(0, lambda exc=exc: self._show_error("Save Error", str(exc)))
+            self.root.after(0, self._show_save_error, exc)
 
     def _finish_save(self, path: Path, encoding: str) -> None:
         self._current_file = path
@@ -319,6 +354,12 @@ class TextEditorApp:
     def _show_error(self, title: str, message: str) -> None:
         messagebox.showerror(title, message)
         self._set_status(message)
+
+    def _show_open_error(self, exc: BaseException) -> None:
+        self._show_error("Open Error", str(exc))
+
+    def _show_save_error(self, exc: BaseException) -> None:
+        self._show_error("Save Error", str(exc))
 
     def _show_info(self, title: str, message: str) -> None:
         messagebox.showinfo(title, message)
@@ -365,7 +406,10 @@ class TextEditorApp:
         self.text.tag_remove("find_match", "1.0", tk.END)
         start_index = self.text.index(tk.INSERT)
         content = self.text.get("1.0", "end-1c")
-        start_offset = int(self.text.count("1.0", start_index, "chars")[0])
+        start_count = self.text.count("1.0", start_index, "chars")
+        if not start_count:
+            return
+        start_offset = int(start_count[0])
 
         if use_regex:
             try:
@@ -388,7 +432,10 @@ class TextEditorApp:
             if not match_index:
                 self._show_info("Find", "No matches found.")
                 return
-            start = int(self.text.count("1.0", match_index, "chars")[0])
+            match_count = self.text.count("1.0", match_index, "chars")
+            if not match_count:
+                return
+            start = int(match_count[0])
             end = start + len(query)
 
         start_idx = self.text.index(f"1.0 + {start} chars")
@@ -464,7 +511,9 @@ class TextEditorApp:
         self._autosave_enabled = self.autosave_var.get()
         self.config.autosave_enabled = self._autosave_enabled
         save_config(self.config)
-        self._set_status("Autosave enabled" if self._autosave_enabled else "Autosave disabled")
+        self._set_status(
+            "Autosave enabled" if self._autosave_enabled else "Autosave disabled"
+        )
 
     def set_autosave_interval(self) -> None:
         interval = simpledialog.askinteger(
@@ -483,7 +532,9 @@ class TextEditorApp:
     def _schedule_autosave(self) -> None:
         if self._autosave_job:
             self.root.after_cancel(self._autosave_job)
-        self._autosave_job = self.root.after(self._autosave_interval * 1000, self._autosave_tick)
+        self._autosave_job = self.root.after(
+            self._autosave_interval * 1000, self._autosave_tick
+        )
 
     def _autosave_tick(self) -> None:
         if self._autosave_enabled and self._dirty:
@@ -527,7 +578,11 @@ class TextEditorApp:
                 self.text.delete("1.0", tk.END)
                 self.text.insert("1.0", text)
                 self.text.edit_reset()
-                self._current_file = Path(meta.get("path")) if meta.get("path") else None
+                path_value = meta.get("path")
+                if isinstance(path_value, str) and path_value:
+                    self._current_file = Path(path_value)
+                else:
+                    self._current_file = None
                 self._current_encoding = meta.get("encoding") or "utf-8"
                 self._set_dirty(True)
                 self._set_status("Recovery loaded. Please save your work.")
@@ -561,21 +616,25 @@ class TextEditorApp:
         for path_str in self.config.recent_files:
             self.recent_menu.add_command(
                 label=path_str,
-                command=lambda p=path_str: self._open_recent(p),
+                command=partial(self._open_recent, path_str),
             )
 
     def _open_recent(self, path_str: str) -> None:
         path = Path(path_str)
         if not path.exists():
             self._show_info("Recent Files", "File not found, removing from list.")
-            self.config.recent_files = [p for p in self.config.recent_files if p != path_str]
+            self.config.recent_files = [
+                p for p in self.config.recent_files if p != path_str
+            ]
             save_config(self.config)
             self._update_recent_menu()
             return
         if not self._confirm_discard():
             return
         self._set_status("Opening...")
-        threading.Thread(target=self._load_file_thread, args=(path,), daemon=True).start()
+        threading.Thread(
+            target=self._load_file_thread, args=(path,), daemon=True
+        ).start()
 
     def about(self) -> None:
         messagebox.showinfo("About", "TkEditor\nA simple, modern Tkinter text editor.")

@@ -18,7 +18,7 @@ ENCODING_CHOICES = [
 class EncodingDialog:
     """Modal dialog that lets the user pick or enter an encoding."""
 
-    def __init__(self, parent: tk.Misc, initial: str = "utf-8087") -> None:
+    def __init__(self, parent: tk.Tk, initial: str = "utf-8") -> None:
         self._parent = parent
         self._result: str | None = None
 
@@ -52,8 +52,12 @@ class EncodingDialog:
         button_frame = ttk.Frame(frame)
         # change spaces between choose encoding dropbox and ok/cancel buttons
         button_frame.grid(row=1, column=0, columnspan=2, pady=(35, 0))
-        ttk.Button(button_frame, text="OK", command=self._on_ok).pack(side="left", padx=4)
-        ttk.Button(button_frame, text="Cancel", command=self.close).pack(side="left", padx=4)
+        ttk.Button(button_frame, text="OK", command=self._on_ok).pack(
+            side="left", padx=4
+        )
+        ttk.Button(button_frame, text="Cancel", command=self.close).pack(
+            side="left", padx=4
+        )
 
         self._window.bind("<Return>", lambda event: self._on_ok())
         self._window.bind("<Escape>", lambda event: self.close())

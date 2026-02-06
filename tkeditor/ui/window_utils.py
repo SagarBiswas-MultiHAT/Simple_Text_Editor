@@ -3,7 +3,7 @@ from __future__ import annotations
 import tkinter as tk
 
 
-def center_window(window: tk.Misc) -> None:
+def center_window(window: tk.Tk | tk.Toplevel) -> None:
     """Center the given window on the current display."""
     window.update_idletasks()
     width = max(window.winfo_width(), window.winfo_reqwidth(), 200)
