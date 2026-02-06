@@ -1,0 +1,2 @@
+Suggested commit message: "feat: professionalize TkEditor — modular app, atomic IO, settings, tests, CI, packaging, docs"
+Suggested PR title: "Rewrite: professional TkEditor with tests, CI, and packaging"

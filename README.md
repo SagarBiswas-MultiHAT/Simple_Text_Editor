@@ -1,49 +1,76 @@
 
-# Simple Text Editor
+# TkEditor
 
-A lightweight text editor built with Python's Tkinter library. This editor provides basic functionalities such as creating new files, opening existing files, saving files, and displaying file information. It is simple, intuitive, and ideal for small text editing tasks.
+TkEditor is a modern, production-ready Tkinter text editor with autosave recovery,
+encoding support, and configurable UI preferences.
+
+![](https://imgur.com/DV7nSsb.png)
 
 ## Features
 
-- **New File**: Start a new document.
-- **Open File**: Open and edit existing text files.
-- **Save File**: Save your current work.
-- **Save As**: Save the file with a new name or location.
-- **About**: Display information about the editor.
-- **Exit**: Close the application.
-- **Keyboard Shortcuts**: Supports `Ctrl+S` for quick save.
-- **Status Bar**: Displays the current file name or status.
+- New, Open, Save, Save As with atomic writes
+- Unsaved-change detection with clear prompts
+- Undo/Redo, Cut/Copy/Paste, Select All
+- Find & Replace with regex support and highlighting
+- Live line/column status
+- Cross-platform shortcuts (Ctrl/Cmd)
+- UTF-8 default with BOM detection; encoding selection on Save As
+- Encoding save dialog now presents a dropdown of common encodings and validates the choice
+- All windows/dialogs start centered on the current monitor
+- Autosave with recovery on next launch
+- Light/Dark theme and font customization, persisted settings
+- Recent files list
+- Rotating file logging for debug mode
 
-## Requirements
+## Install
 
-- Python 3.x
-- Tkinter (comes pre-installed with Python)
+```bash
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 
-## Installation
+python -m pip install -e .
+```
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/SagarBiswas-MultiHAT/simple-text-editor.git
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd simple-text-editor
-   ```
+## Run
 
-## Usage
+```bash
+python -m tkeditor
+```
 
-1. Run the script:
-   ```bash
-   python script.py
-   ```
-2. Use the menu options to create, open, or save files.
-3. The status bar displays the current file status.
+## Development
 
-## Example
+```bash
+python -m pip install -e .[dev]
+pre-commit install
+```
 
-- Create a new file by selecting `File > New`.
-- Open an existing file by selecting `File > Open`.
-- Save your work using `File > Save` or `Ctrl+S`.
+### Tests
 
+```bash
+python -m pytest
+```
 
-#### Contributions are welcome! Feel free to open issues or submit pull requests.
+### Lint and Type Check
+
+```bash
+python -m ruff check .
+python -m isort --check-only .
+python -m black --check .
+python -m mypy tkeditor
+```
+
+## Build (PyInstaller)
+
+```bash
+make pyinstaller
+```
+
+## Screenshots
+ 
+- Placeholder: light theme
+- Placeholder: dark theme
+
+## Configuration
+
+Settings are stored in a JSON file under the OS-specific user config directory.
+You can override the location by setting the `TKEDITOR_CONFIG_DIR` environment variable.
