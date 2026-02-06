@@ -1,13 +1,14 @@
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 import re
 import sys
 import threading
+import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog, font, messagebox, simpledialog
-import tkinter as tk
 
 from .config import EditorConfig, get_recovery_paths, load_config, save_config
 from .io import TextIOError, read_text_file, write_text_file
@@ -234,10 +235,8 @@ class TextEditorApp:
         try:
             text, encoding = read_text_file(path)
             self.root.after(0, lambda: self._apply_loaded_file(path, text, encoding))
-        except TextIOError as exc:
-            self.root.after(0, lambda: self._show_error("Open Error", str(exc)))
-        except OSError as exc:
-            self.root.after(0, lambda: self._show_error("Open Error", str(exc)))
+        except (TextIOError, OSError) as exc:
+            self.root.after(0, lambda exc=exc: self._show_error("Open Error", str(exc)))
 
     def _apply_loaded_file(self, path: Path, text: str, encoding: str) -> None:
         self.text.delete("1.0", tk.END)
@@ -306,10 +305,8 @@ class TextEditorApp:
         try:
             write_text_file(path, text, encoding)
             self.root.after(0, lambda: self._finish_save(path, encoding))
-        except OSError as exc:
-            self.root.after(0, lambda: self._show_error("Save Error", str(exc)))
-        except TextIOError as exc:
-            self.root.after(0, lambda: self._show_error("Save Error", str(exc)))
+        except (OSError, TextIOError) as exc:
+            self.root.after(0, lambda exc=exc: self._show_error("Save Error", str(exc)))
 
     def _finish_save(self, path: Path, encoding: str) -> None:
         self._current_file = path
@@ -328,16 +325,12 @@ class TextEditorApp:
         self._set_status(message)
 
     def undo(self) -> None:
-        try:
+        with contextlib.suppress(tk.TclError):
             self.text.edit_undo()
-        except tk.TclError:
-            pass
 
     def redo(self) -> None:
-        try:
+        with contextlib.suppress(tk.TclError):
             self.text.edit_redo()
-        except tk.TclError:
-            pass
 
     def cut(self) -> None:
         self.text.event_generate("<<Cut>>")

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import os
 import tempfile
 from pathlib import Path
@@ -62,7 +63,5 @@ def atomic_write(path: Path, text: str, encoding: str = "utf-8") -> None:
         os.replace(temp_file, path)
     finally:
         if temp_file and temp_file.exists():
-            try:
+            with contextlib.suppress(OSError):
                 temp_file.unlink()
-            except OSError:
-                pass

@@ -1,5 +1,6 @@
-from tkinter import filedialog, messagebox
 import tkinter as tk
+from tkinter import filedialog, messagebox
+
 
 # Function to open a file
 def open_file():

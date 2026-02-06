@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 from logging.handlers import RotatingFileHandler
-from pathlib import Path
 
 from .config import get_log_path
 

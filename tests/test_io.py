@@ -16,7 +16,7 @@ def test_atomic_write_and_read(tmp_path: Path) -> None:
 
 def test_utf8_bom_detection(tmp_path: Path) -> None:
     path = tmp_path / "bom.txt"
-    path.write_bytes(b"\xef\xbb\xbf" + "text".encode("utf-8"))
+    path.write_bytes(b"\xef\xbb\xbftext")
     content, encoding = read_text_file(path)
     assert content == "text"
     assert encoding == "utf-8-sig"
