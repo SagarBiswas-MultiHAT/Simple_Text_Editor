@@ -1,11 +1,11 @@
-import tkinter as tk
 from tkinter import filedialog, messagebox
+import tkinter as tk
 
 # Function to open a file
 def open_file():
     filepath = filedialog.askopenfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")])
     if filepath:
-        with open(filepath, 'r') as file:
+        with open(filepath) as file:
             editor.delete(1.0, tk.END)
             editor.insert(tk.END, file.read())
         status_bar.config(text=f"Opened: {filepath}")
@@ -14,7 +14,7 @@ def open_file():
 def save_file():
     global current_file
     if current_file:
-        with open(current_file, 'w') as file:
+        with open(current_file) as file:
             file.write(editor.get("1.0",'end-1c'))
         status_bar.config(text=f"Saved: {current_file}")
     else:
@@ -24,7 +24,7 @@ def save_file():
 def save_file_as():
     filepath = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")])
     if filepath:
-        with open(filepath, 'w') as file:
+        with open(filepath) as file:
             file.write(editor.get("1.0",'end-1c'))
         status_bar.config(text=f"Saved: {filepath}")
         global current_file
